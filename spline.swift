@@ -3,33 +3,6 @@ import Cairo_swift
 
 prefix operator * {}
 
-public func fps(fps: Double) {
-	
-}
-
-public func size(width width: Int, height: Int) {
-	
-}
-
-public func showParams() {
-	
-}
-
-public func hideParams() {
-	
-}
-
-//public func param(p: Parameter) {
-//	
-//}
-
-public func start(sketch: Sketch2D) {
-	
-}
-
-//
-//
-
 public class Sketch2D {
 	public init() {
 		SDL.start()
