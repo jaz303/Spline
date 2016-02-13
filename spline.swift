@@ -4,21 +4,33 @@ import Cairo_swift
 prefix operator * {}
 
 public class Sketch2D {
-	public init() {
+	public init(width: Int, height: Int) {
+		
 		SDL.start()
-		_fps = 30
+
+		_window = Window(title: "spline", width: width, height: height)
+		_renderer = _window.renderer
+		_texture = _renderer.createStreamingTexture(width: width, height: height)
+		
+		_surface = Surface(width: width, height: height)
+		_cairoImageSurface = ImageSurface(
+			data: _surface.pixels,
+			width: _surface.width,
+			height: _surface.height,
+			stride: _surface.pitch
+		)
+
+		_canvasRect = Rect(x: 0, y: 0, w: Int32(width), h: Int32(height))
+		
+		ctx = Context(surface: _cairoImageSurface)
+		
 	}
 
 	public func fps(fps: Double) {
 		_fps = fps
 	}
 
-	public func size(width width: Int, height: Int) {
-		_window = Window(title: "spline", width: width, height: height)
-	}
-
 	public func start() {
-		setup()
 
 		var clock = Clock(dt: 0.0)
 		let fps = _fps
@@ -26,16 +38,28 @@ public class Sketch2D {
 
 		var evt = Event()
 
-		while true {
-			Events.wait(&evt)
+		_running = true
+		while _running {
+			Events.wait(&evt, timeout: 1)
+			while Events.poll(&evt) {
+				if evt.isWindow && evt.isWindowClose {
+					_running = false
+				}
+			}
+			
+
 			clock.dt = Double(msPerFrame) / 1000.0
 			oneFrame(clock)
 			Timers.delay(Int(msPerFrame))
+
+			_texture.copyFromSurface(_surface)
+			_renderer.copyTexture(
+				_texture,
+				sourceRect: _canvasRect,
+				destinationRect: _canvasRect
+			)
+			_renderer.present()
 		}
-	}
-
-	public func setup() {
-
 	}
 
 	public func loop(clock: Clock) {
@@ -48,8 +72,50 @@ public class Sketch2D {
 		return Timers.getTicks() - frameStart
 	}
 
-	private var _fps: Double
-	private var _window: Window?
+	public func clear() {
+		clear(r: 0.0, g: 0.0, b: 0.0)
+	}
+
+	public func clear(r r: Double, g: Double, b: Double) {
+		ctx.setSourceColor(red: r, green: g, blue: b)
+		ctx.clear()
+	}
+
+	public func stroke(r r: Double, g: Double, b: Double) {
+		ctx.setSourceColor(red: r, green: g, blue: b)
+	}
+
+	public func begin() {
+		ctx.beginPath()
+	}
+
+	public func moveTo(x x: Double, y: Double) {
+		ctx.moveTo(x: x, y: y)
+	}
+
+	public func lineTo(x x: Double, y: Double) {
+		ctx.lineTo(x: x, y: y)
+	}
+
+	public func stroke() {
+		ctx.stroke()
+	}
+
+
+
+	public var ctx: Context
+
+	private var _canvasRect: Rect
+
+	private var _running = false
+
+	private var _surface: Surface
+	private var _cairoImageSurface: ImageSurface
+
+	private var _fps: Double = 30.0
+	private var _window: Window
+	private var _renderer: Renderer
+	private var _texture: Texture
 }
 
 //
