@@ -48,7 +48,6 @@ public class Sketch2D : Constants {
 
 		_running = true
 		while _running {
-			Events.wait(&evt, timeout: 1)
 			while Events.poll(&evt) {
 				if evt.isWindow && evt.isWindowClose {
 					_running = false
