@@ -102,6 +102,70 @@ public class Sketch2D {
 	}
 
 
+ 	//
+ 	// Matrix
+
+ 	public func transform(inout matrix: Matrix) {
+ 		ctx.transform(&matrix)
+ 	}
+
+ 	public func transform(  xx: Double,
+ 						  _ yx: Double,
+ 						  _ xy: Double,
+ 						  _ yy: Double,
+ 						  _ x0: Double,
+ 						  _ y0: Double) {
+ 		var m = Matrix(xx: xx, yx: yx, xy: xy, yy: yy, x0: x0, y0: y0)
+ 		ctx.transform(&m)				    
+	}
+
+ 	public func setMatrix(inout matrix: Matrix) {
+ 		ctx.setMatrix(&matrix)
+ 	}
+
+ 	public func setMatrix(  xx: Double,
+ 						  _ yx: Double,
+ 						  _ xy: Double,
+ 						  _ yy: Double,
+ 						  _ x0: Double,
+ 						  _ y0: Double) {
+ 		var m = Matrix(xx: xx, yx: yx, xy: xy, yy: yy, x0: x0, y0: y0)
+ 		ctx.setMatrix(&m)
+ 	}
+
+ 	public func popMatrix() {
+ 		var matrix = _matrixStack.removeLast()
+ 		ctx.setMatrix(&matrix)
+ 	}
+
+ 	public func pushMatrix() {
+ 		var matrix = Matrix.zero()
+ 		ctx.getMatrix(&matrix)
+ 		_matrixStack.append(matrix)
+ 	}
+
+ 	public func resetMatrix() {
+ 		ctx.setIdentity()
+ 	}
+
+ 	public func rotate(theta: Double) {
+ 		ctx.rotate(theta)
+ 	}
+
+ 	public func scale(factor: Double) {
+ 		ctx.scale(factor)
+ 	}
+
+ 	public func scale(sx sx: Double, sy: Double) {
+ 		ctx.scale(sx: sx, sy: sy)
+ 	}
+
+ 	public func translate(dx dx: Double, dy: Double) {
+ 		ctx.translate(dx: dx, dy: dy)
+ 	}
+
+ 	//
+ 	//
 
 	public var ctx: Context
 
@@ -116,6 +180,8 @@ public class Sketch2D {
 	private var _window: Window
 	private var _renderer: Renderer
 	private var _texture: Texture
+
+	private var _matrixStack = [Matrix]()
 }
 
 //
