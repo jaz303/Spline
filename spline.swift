@@ -3,12 +3,63 @@ import Cairo_swift
 
 prefix operator * {}
 
+public protocol ARGBConvertible {
+	func toARGB() -> UInt32
+}
+
+public class Colors {
+	public static let white 	= Color(r: 1.0, g: 1.0, b: 1.0)
+	public static let black 	= Color(r: 0.0, g: 0.0, b: 0.0)
+	public static let red 		= Color(r: 1.0, g: 0.0, b: 0.0)
+	public static let green 	= Color(r: 0.0, g: 1.0, b: 0.0)
+	public static let blue		= Color(r: 0.0, g: 0.0, b: 1.0)
+	public static let yellow	= Color(r: 1.0, g: 1.0, b: 0.0)
+	public static let cyan		= Color(r: 0.0, g: 1.0, b: 1.0)
+}
+
+public class Color : ARGBConvertible {
+	public let red : Double
+	public let green : Double
+	public let blue : Double
+	public let alpha : Double
+
+	public convenience init(gray: Double, a: Double = 1.0) {
+		self.init(r: gray, g: gray, b: gray, a: a)
+	}
+
+	public init(r: Double, g: Double, b: Double, a: Double = 1.0) {
+		red = r
+		green = g
+		blue = b
+		alpha = a
+	}
+
+	public func withAlpha(newAlpha: Double) -> Color {
+		return Color(r: red, g: green, b: blue, a: newAlpha)
+	}
+
+	public func toARGB() -> UInt32 {
+		return (UInt32(alpha * 255) << 24)
+				| (UInt32(red * 255) << 16)
+				| (UInt32(green * 255) << 8)
+				| UInt32(blue * 255)
+	}
+}
+
 public class Constants {
 	public let QUARTER_PI = 0.7853982
 	public let HALF_PI = 1.57079632679489661923
 	public let PI = 3.14159265358979323846
 	public let TWO_PI = 6.28318530717958647693
 	public let TAU = 6.28318530717958647693
+
+	public let WHITE = Colors.white
+	public let BLACK = Colors.black
+	public let RED = Colors.red
+	public let GREEN = Colors.green
+	public let BLUE = Colors.blue
+	public let YELLOW = Colors.yellow
+	public let CYAN = Colors.cyan
 }
 
 public class Sketch2D : Constants {
@@ -116,6 +167,10 @@ public class Sketch2D : Constants {
 		let green = UInt32(g * 255)
 		let blue = UInt32(b * 255)
 		_surface.putPixel32(x, y, red << 16 | green << 8 | blue)
+	}
+
+	public func plot(x: Int, _ y: Int, color: ARGBConvertible) {
+		_surface.putPixel32(x, y, color.toARGB())	
 	}
 
 
