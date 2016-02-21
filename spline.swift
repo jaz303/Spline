@@ -108,6 +108,16 @@ public class Sketch2D : Constants {
 		ctx.stroke()
 	}
 
+	//
+	// Pixels
+
+	public func plot(x: Int, _ y: Int, r: Double, g: Double, b: Double) {
+		let red = UInt32(r * 255)
+		let green = UInt32(g * 255)
+		let blue = UInt32(b * 255)
+		_surface.putPixel32(x, y, red << 16 | green << 8 | blue)
+	}
+
 
  	//
  	// Matrix
