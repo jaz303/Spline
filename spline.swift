@@ -7,6 +7,16 @@ public protocol ARGBConvertible {
 	func toARGB() -> UInt32
 }
 
+public protocol RGBColor {
+	var red : Double { get }
+	var green : Double { get }
+	var blue : Double { get }
+}
+
+public protocol RGBAColor : RGBColor {
+	var alpha : Double { get }
+}
+
 public class Colors {
 	public static let white 	= Color(r: 1.0, g: 1.0, b: 1.0)
 	public static let black 	= Color(r: 0.0, g: 0.0, b: 0.0)
@@ -17,7 +27,7 @@ public class Colors {
 	public static let cyan		= Color(r: 0.0, g: 1.0, b: 1.0)
 }
 
-public class Color : ARGBConvertible {
+public class Color : ARGBConvertible, RGBAColor {
 	public let red : Double
 	public let green : Double
 	public let blue : Double
@@ -134,9 +144,36 @@ public class Sketch2D : Constants {
 		clear(r: 0.0, g: 0.0, b: 0.0)
 	}
 
+	public func clear(color: RGBColor) {
+		ctx.setSourceColor(
+			red: color.red,
+			green: color.green,
+			blue: color.blue
+		)
+		ctx.clear()
+	}
+
 	public func clear(r r: Double, g: Double, b: Double) {
 		ctx.setSourceColor(red: r, green: g, blue: b)
 		ctx.clear()
+	}
+
+	public func stroke(color: RGBColor, alpha: Double) {
+		ctx.setSourceColor(
+			red: color.red,
+			green: color.green,
+			blue: color.blue,
+			alpha: alpha
+		)
+	}
+
+	public func stroke(color: RGBAColor) {
+		ctx.setSourceColor(
+			red: color.red,
+			green: color.green,
+			blue: color.blue,
+			alpha: color.alpha
+		)
 	}
 
 	public func stroke(r r: Double, g: Double, b: Double) {
