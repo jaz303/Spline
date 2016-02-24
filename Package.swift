@@ -11,6 +11,10 @@ let package = Package(
 		.Package(
 			url: "https://github.com/jaz303/Cairo.swift.git",
 			majorVersion: 0
-		)
+		),
+		.Package(
+			url: "https://github.com/jaz303/CSDL2.swift.git",
+			majorVersion: 1
+		),
 	]
 )
