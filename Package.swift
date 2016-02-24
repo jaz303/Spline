@@ -5,11 +5,11 @@ let package = Package(
 	targets: [],
 	dependencies: [
 		.Package(
-			url: "https://github.com/jaz303/SDL2.git",
+			url: "https://github.com/jaz303/SDL2.swift.git",
 			majorVersion: 0
 		),
 		.Package(
-			url: "https://github.com/jaz303/Cairo.git",
+			url: "https://github.com/jaz303/Cairo.swift.git",
 			majorVersion: 0
 		)
 	]
