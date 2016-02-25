@@ -47,7 +47,7 @@ public class Sketch2D {
 
 			clock.dt = Double(msPerFrame) / 1000.0
 			oneFrame(clock)
-			Timers.delay(Int(msPerFrame))
+			sdl.delay(Int(msPerFrame))
 
 			_texture.copyFromSurface(_surface)
 			_renderer.copyTexture(
@@ -64,9 +64,9 @@ public class Sketch2D {
 	}
 
 	private func oneFrame(clock: Clock) -> UInt32 {
-		let frameStart = Timers.getTicks()
+		let frameStart = sdl.getTicks()
 		loop(clock)
-		return Timers.getTicks() - frameStart
+		return sdl.getTicks() - frameStart
 	}
 
 	public func clear() {
